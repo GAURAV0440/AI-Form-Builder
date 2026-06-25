@@ -1,0 +1,48 @@
+# =========================
+# Python
+# =========================
+backend/.venv/
+backend/__pycache__/
+backend/**/*.pyc
+backend/**/*.pyo
+backend/**/*.pyd
+
+# SQLite Database
+backend/app.db
+
+# Uploaded Files
+backend/app/uploads/
+
+# Environment Variables
+backend/.env
+
+# =========================
+# Node
+# =========================
+frontend/node_modules/
+
+# Vite
+frontend/dist/
+
+# Logs
+*.log
+
+# =========================
+# VS Code
+# =========================
+.vscode/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# =========================
+# Python Cache
+# =========================
+.pytest_cache/
+.mypy_cache/
+
+# =========================
+# Misc
+# =========================
+.env
