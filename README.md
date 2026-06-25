@@ -605,3 +605,17 @@ PowerShell, then run `npm install`.
 - Validate file content and size before production deployment.
 - Protect admin endpoints with authentication before exposing the application
   publicly.
+
+<img width="1851" height="960" alt="image" src="https://github.com/user-attachments/assets/7ae7c9fd-4ff7-439b-be89-1a16aacd74bf" />
+
+<img width="1851" height="960" alt="image" src="https://github.com/user-attachments/assets/bfad748c-b3bf-4244-9643-6097ad4e555a" />
+
+<img width="1851" height="960" alt="image" src="https://github.com/user-attachments/assets/ee50ab95-75a2-46e1-b09f-b738855e6a67" />
+
+<img width="1851" height="960" alt="image" src="https://github.com/user-attachments/assets/90e50f48-2f6c-489b-8e1d-62154e6d762e" />
+
+<img width="1851" height="960" alt="image" src="https://github.com/user-attachments/assets/7732eb4d-826e-4e87-a7ac-fba2588c0829" />
+
+<img width="1851" height="960" alt="image" src="https://github.com/user-attachments/assets/9b0eec37-0b72-4573-81e1-068fda2922d4" />
+
+<img width="1851" height="960" alt="image" src="https://github.com/user-attachments/assets/1947c22f-1cbb-46d5-945c-192e4d22cfba" />
