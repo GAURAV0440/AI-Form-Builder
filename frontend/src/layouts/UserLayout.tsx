@@ -1,9 +1,13 @@
 import { Outlet } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 export default function UserLayout() {
   return (
-    <main className="min-h-screen bg-slate-100">
-      <Outlet />
-    </main>
+    <div className="app-background min-h-screen">
+      <Navbar />
+      <main>
+        <Outlet />
+      </main>
+    </div>
   );
 }

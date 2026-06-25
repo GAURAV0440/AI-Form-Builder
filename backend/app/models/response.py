@@ -9,6 +9,9 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from app.core.database import Base
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
 
 
 class Response(Base):
@@ -33,7 +36,7 @@ class Response(Base):
 
     submitted_at = Column(
         DateTime(timezone=True),
-        server_default=func.now()
+        default=lambda: datetime.now(ZoneInfo("Asia/Kolkata"))
     )
 
     form = relationship(

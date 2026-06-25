@@ -1,8 +1,15 @@
 import { useEffect, useState } from "react";
-import { FileText, ArrowRight } from "lucide-react";
+import {
+  ArrowRight,
+  CalendarDays,
+  FileSearch,
+  FileText,
+  Sparkles,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import api from "../../api/api";
+import Loader from "../../components/Loader";
 
 interface Form {
   id: string;
@@ -14,109 +21,111 @@ interface Form {
 
 export default function UserForms() {
   const navigate = useNavigate();
-
   const [forms, setForms] = useState<Form[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const loadForms = async () => {
+      try {
+        setLoading(true);
+        const res = await api.get("/forms/");
+        setForms(res.data);
+      } catch (err) {
+        console.error(err);
+        toast.error("Unable to load forms");
+      } finally {
+        setLoading(false);
+      }
+    };
+
     loadForms();
   }, []);
 
-  const loadForms = async () => {
-    try {
-      setLoading(true);
-
-      const res = await api.get("/forms/");
-
-      setForms(res.data);
-    } catch (err) {
-      console.error(err);
-      toast.error("Unable to load forms");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center text-2xl font-semibold">
-        Loading Forms...
-      </div>
-    );
+    return <Loader label="Finding available forms..." />;
   }
 
   return (
-    <div className="min-h-screen bg-slate-100">
-
-      <div className="mx-auto max-w-7xl p-8">
-
-        <h1 className="mb-2 text-4xl font-bold">
-          Available Forms
-        </h1>
-
-        <p className="mb-8 text-gray-500">
-          Choose a form and let AI fill it from your document.
-        </p>
+    <div className="relative px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+      <div className="soft-orb right-[-4rem] top-16 h-64 w-64 bg-indigo-300/20" />
+      <div className="mx-auto max-w-7xl">
+        <div className="animate-enter max-w-3xl">
+          <p className="eyebrow">
+            <Sparkles size={14} />
+            AI-assisted applications
+          </p>
+          <h1 className="page-title mt-3 text-4xl font-black text-slate-950 sm:text-6xl">
+            Find the right form.
+            <br />
+            <span className="text-slate-400">Let AI handle the rest.</span>
+          </h1>
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-600">
+            Choose a form, upload your document, and review the information
+            extracted for you before submitting.
+          </p>
+        </div>
 
         {forms.length === 0 ? (
-          <div className="rounded-xl bg-white p-10 text-center shadow">
-            No forms available.
+          <div className="surface-card animate-enter-delay mt-10 p-12 text-center">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600">
+              <FileSearch size={28} />
+            </div>
+            <h2 className="mt-5 text-xl font-black text-slate-900">
+              No forms available
+            </h2>
+            <p className="mt-2 text-slate-500">
+              Please check back later for new opportunities.
+            </p>
           </div>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-
-            {forms.map((form) => (
-
-              <div
+          <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {forms.map((form, index) => (
+              <article
                 key={form.id}
-                className="rounded-xl bg-white p-6 shadow transition hover:shadow-lg"
+                className="surface-card elevated-card animate-enter group flex flex-col overflow-hidden"
+                style={{ animationDelay: `${Math.min(index * 70, 280)}ms` }}
               >
-
-                <div className="mb-4 flex items-center gap-3">
-
-                  <FileText
-                    className="text-blue-600"
-                    size={30}
-                  />
-
-                  <div>
-
-                    <h2 className="text-xl font-semibold">
-                      {form.title}
-                    </h2>
-
-                    <p className="text-sm text-gray-500">
+                <div className="h-1.5 bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-400" />
+                <div className="flex flex-1 flex-col p-6">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 transition group-hover:rotate-[-4deg] group-hover:scale-105">
+                      <FileText size={23} />
+                    </div>
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-extrabold capitalize text-emerald-700">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                       {form.status}
-                    </p>
-
+                    </span>
                   </div>
 
+                  <h2 className="page-title mt-6 text-2xl font-black text-slate-900">
+                    {form.title}
+                  </h2>
+                  <p className="mt-3 flex-1 leading-7 text-slate-500">
+                    {form.description ||
+                      "Complete this form quickly with optional AI-assisted document extraction."}
+                  </p>
+
+                  <div className="mt-6 flex items-center gap-2 border-t border-slate-100 pt-4 text-xs font-semibold text-slate-400">
+                    <CalendarDays size={15} />
+                    Added {new Date(form.created_at).toLocaleDateString()}
+                  </div>
+
+                  <button
+                    onClick={() => navigate(`/form/${form.id}`)}
+                    className="btn-primary mt-5 w-full py-3.5"
+                  >
+                    Start application
+                    <ArrowRight
+                      size={18}
+                      className="transition-transform group-hover:translate-x-1"
+                    />
+                  </button>
                 </div>
-
-                <p className="mb-6 text-gray-600">
-                  {form.description || "No description"}
-                </p>
-
-                <button
-                  onClick={() =>
-                    navigate(`/form/${form.id}`)
-                  }
-                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 py-3 text-white hover:bg-blue-700"
-                >
-                  Apply Now
-
-                  <ArrowRight size={18} />
-                </button>
-
-              </div>
-
+              </article>
             ))}
-
           </div>
         )}
-
       </div>
-
     </div>
   );
 }

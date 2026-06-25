@@ -15,7 +15,7 @@ router = APIRouter(
 @router.post("/")
 def create_form(
     data: FormCreate,
-    db: Session = Depends(get_db)
+    db: Session =Depends(get_db)
 ):
     form = Form(
         title=data.title,
@@ -37,7 +37,6 @@ def create_form(
             options=item.options,
             field_order=item.field_order
         )
-
         db.add(field)
 
     db.commit()
@@ -48,6 +47,37 @@ def create_form(
         "form_id": form.id
     }
 
+
+@router.get("/")
+def get_forms(
+    db: Session = Depends(get_db)
+):
+    forms = db.query(Form).all()
+
+    return forms
+
+@router.delete("/{form_id}")
+def delete_form(
+    form_id: str,
+    db: Session = Depends(get_db)
+):
+    form = (
+        db.query(Form)
+        .filter(Form.id == form_id)
+        .first()
+    )
+
+    if not form:
+        return {
+            "message": "Form not found"
+        }
+
+    db.delete(form)
+    db.commit()
+
+    return {
+        "message": "Form deleted successfully"
+    }
 
 @router.get("/{form_id}")
 def get_form(
